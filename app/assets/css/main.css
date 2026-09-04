@@ -1,0 +1,275 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════
+   INDOVINAUDIO — NEUMORPHISM DESIGN SYSTEM
+   Dark-mode-first palette with soft, tactile surfaces
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── Design Tokens ────────────────────────────────────────── */
+@theme {
+  --color-neu-bg: #1a1d21;
+  --color-neu-surface: #22262b;
+  --color-neu-surface-alt: #2a2f35;
+  --color-neu-text: #e4e8ef;
+  --color-neu-text-muted: #8a919c;
+  --color-neu-text-dim: #5a6170;
+  --color-neu-accent: #6c5ce7;
+  --color-neu-accent-light: #a29bfe;
+  --color-neu-success: #00cec9;
+  --color-neu-error: #fd7272;
+  --color-neu-warning: #fbc531;
+
+  --shadow-neu-light: rgba(255, 255, 255, 0.04);
+  --shadow-neu-dark: rgba(0, 0, 0, 0.55);
+  --shadow-neu-inset-light: rgba(255, 255, 255, 0.03);
+  --shadow-neu-inset-dark: rgba(0, 0, 0, 0.45);
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --radius-neu: 16px;
+  --radius-neu-sm: 10px;
+  --radius-neu-lg: 24px;
+  --radius-neu-full: 9999px;
+}
+
+/* ─── Base Styles ──────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-neu-bg);
+  color: var(--color-neu-text);
+  min-height: 100dvh;
+}
+
+/* ─── Neumorphic Surfaces ──────────────────────────────────── */
+.neu-surface {
+  background: var(--color-neu-surface);
+  border-radius: var(--radius-neu);
+  box-shadow:
+    6px 6px 14px var(--shadow-neu-dark),
+    -6px -6px 14px var(--shadow-neu-light);
+  transition: box-shadow 0.25s ease, transform 0.2s ease;
+}
+
+.neu-convex {
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--color-neu-surface) 100%, white 6%),
+    color-mix(in srgb, var(--color-neu-surface) 100%, black 8%)
+  );
+  border-radius: var(--radius-neu);
+  box-shadow:
+    5px 5px 12px var(--shadow-neu-dark),
+    -5px -5px 12px var(--shadow-neu-light);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.neu-convex:hover {
+  box-shadow:
+    7px 7px 16px var(--shadow-neu-dark),
+    -7px -7px 16px var(--shadow-neu-light);
+  transform: translateY(-1px);
+}
+
+.neu-convex:active,
+.neu-pressed {
+  box-shadow:
+    inset 4px 4px 10px var(--shadow-neu-inset-dark),
+    inset -4px -4px 10px var(--shadow-neu-inset-light);
+  transform: translateY(0);
+}
+
+.neu-concave {
+  background: var(--color-neu-surface);
+  border-radius: var(--radius-neu);
+  box-shadow:
+    inset 4px 4px 10px var(--shadow-neu-inset-dark),
+    inset -4px -4px 10px var(--shadow-neu-inset-light);
+}
+
+.neu-flat {
+  background: var(--color-neu-surface);
+  border-radius: var(--radius-neu);
+  box-shadow: none;
+}
+
+/* ─── Interactive Elements ─────────────────────────────────── */
+.neu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  color: var(--color-neu-text);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.neu-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow:
+    3px 3px 8px var(--shadow-neu-dark),
+    -3px -3px 8px var(--shadow-neu-light) !important;
+}
+
+.neu-btn-primary {
+  background: linear-gradient(135deg, var(--color-neu-accent), var(--color-neu-accent-light));
+  color: #fff;
+  box-shadow:
+    4px 4px 12px rgba(108, 92, 231, 0.35),
+    -4px -4px 12px var(--shadow-neu-light);
+}
+
+.neu-btn-primary:hover:not(:disabled) {
+  box-shadow:
+    6px 6px 18px rgba(108, 92, 231, 0.45),
+    -6px -6px 18px var(--shadow-neu-light);
+  transform: translateY(-1px);
+}
+
+.neu-btn-primary:active:not(:disabled) {
+  box-shadow:
+    inset 3px 3px 8px rgba(0, 0, 0, 0.35),
+    inset -3px -3px 8px rgba(162, 155, 254, 0.12);
+  transform: translateY(0);
+}
+
+/* ─── Input Fields ─────────────────────────────────────────── */
+.neu-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--color-neu-surface);
+  border: 2px solid transparent;
+  border-radius: var(--radius-neu-sm);
+  box-shadow:
+    inset 3px 3px 8px var(--shadow-neu-inset-dark),
+    inset -3px -3px 8px var(--shadow-neu-inset-light);
+  color: var(--color-neu-text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.neu-input::placeholder {
+  color: var(--color-neu-text-dim);
+}
+
+.neu-input:focus {
+  border-color: var(--color-neu-accent);
+  box-shadow:
+    inset 3px 3px 8px var(--shadow-neu-inset-dark),
+    inset -3px -3px 8px var(--shadow-neu-inset-light),
+    0 0 0 3px rgba(108, 92, 231, 0.15);
+}
+
+/* ─── Animations ───────────────────────────────────────────── */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes count-up-pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease forwards;
+}
+
+.animate-count-pop {
+  animation: count-up-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-neu-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neu-surface-alt);
+  border-radius: 3px;
+}
+
+/* ─── Utilities ────────────────────────────────────────────── */
+.text-gradient-accent {
+  background: linear-gradient(135deg, var(--color-neu-accent), var(--color-neu-accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
