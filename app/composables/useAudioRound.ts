@@ -1,4 +1,5 @@
 import { ref, computed, onUnmounted } from 'vue'
+import { useGameHistory } from './useGameHistory'
 
 /* ─── Types ────────────────────────────────────────────────── */
 export interface Track {
@@ -13,7 +14,7 @@ export interface Track {
 
 export type GamePhase = 'selecting' | 'playing' | 'result'
 export type GameResult = 'win' | 'lose' | null
-export type GameMode = 'random' | 'genre' | 'artist'
+export type GameMode = 'random' | 'genre' | 'artist' | 'decade'
 
 /* ─── Constants ────────────────────────────────────────────── */
 export const STEPS = [
@@ -40,6 +41,11 @@ export function useAudioRound() {
   // ── Audio ──
   let audio: HTMLAudioElement | null = null
   let stopTimer: ReturnType<typeof setTimeout> | null = null
+
+  // ── History & Replay ──
+  const lastMode = ref<GameMode | null>(null)
+  const lastFilter = ref<string | null>(null)
+  const { saveRecord } = useGameHistory()
 
   // ── Computed ──
   const maxPoints = computed(() => STEPS[currentStep.value]?.points ?? 0)
@@ -76,6 +82,10 @@ export function useAudioRound() {
       const params = new URLSearchParams()
       if (mode === 'genre' && filter) params.set('genre', filter)
       if (mode === 'artist' && filter) params.set('artistId', filter)
+      if (mode === 'decade' && filter) params.set('decade', filter)
+
+      lastMode.value = mode
+      lastFilter.value = filter || null
 
       const qs = params.toString()
       const url = `/api/tracks/random${qs ? '?' + qs : ''}`
@@ -198,6 +208,24 @@ export function useAudioRound() {
     earnedPoints.value = points
     phase.value = 'result'
     stopPlayback()
+
+    if (track.value && lastMode.value) {
+      saveRecord({
+        mode: lastMode.value,
+        filter: lastFilter.value || undefined,
+        trackTitle: track.value.title,
+        trackArtist: track.value.artist,
+        result: outcome,
+        points: outcome === 'win' ? points : 0,
+        step: currentStep.value + 1
+      })
+    }
+  }
+
+  function replayRound() {
+    if (lastMode.value) {
+      startRound(lastMode.value, lastFilter.value || undefined)
+    }
   }
 
   function nextRound() {
@@ -264,6 +292,7 @@ export function useAudioRound() {
 
     // Methods
     startRound,
+    replayRound,
     play,
     skip,
     guess,

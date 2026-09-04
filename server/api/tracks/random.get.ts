@@ -9,6 +9,18 @@ const GENRE_MAP: Record<string, number> = {
   'r&b': 165,
 }
 
+/** Mappa decenni → search query generica per hit */
+const DECADE_MAP: Record<string, string> = {
+  '2020s': 'hits 2020 2021 2022 2023 2024',
+  '2010s': 'hits 2010s',
+  '2000s': 'hits 2000s',
+  '90s': 'hits 90s',
+  '80s': 'hits 80s',
+  '70s': 'hits 70s',
+  '60s': 'hits 60s',
+  '50s': 'hits 50s',
+}
+
 interface DeezerTrack {
   id: number
   title: string
@@ -32,6 +44,7 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   const genre = (query.genre as string)?.toLowerCase()
   const artistId = query.artistId as string
+  const decade = query.decade as string
 
   let apiUrl: string
 
@@ -39,6 +52,10 @@ export default defineEventHandler(async (event) => {
     // Modalità "Per Artista": usa l'ID numerico per ottenere le top tracks
     // L'endpoint /artist/{id}/top restituisce SOLO le tracce di quell'artista
     apiUrl = `https://api.deezer.com/artist/${encodeURIComponent(artistId)}/top?limit=50`
+  } else if (decade && DECADE_MAP[decade]) {
+    // Modalità "Per Periodo": usa una search query per hit di quel periodo
+    const encoded = encodeURIComponent(DECADE_MAP[decade])
+    apiUrl = `https://api.deezer.com/search/track?q=${encoded}&order=RATING_DESC&limit=80`
   } else if (genre && GENRE_MAP[genre]) {
     // Modalità "Per Genere": top chart di quel genere
     apiUrl = `https://api.deezer.com/chart/${GENRE_MAP[genre]}/tracks?limit=100`

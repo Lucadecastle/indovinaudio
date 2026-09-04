@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useAudioRound, STEPS } from '~/composables/useAudioRound'
 import type { GameMode } from '~/composables/useAudioRound'
+import GameHistory from '~/components/GameHistory.vue'
 
 const {
   track,
@@ -17,6 +18,7 @@ const {
   currentDuration,
   isLastStep,
   startRound,
+  replayRound,
   play,
   skip,
   guess,
@@ -24,6 +26,7 @@ const {
 } = useAudioRound()
 
 const guessInput = ref('')
+const showHistory = ref(false)
 
 function handleStart(mode: GameMode, filter?: string) {
   startRound(mode, filter)
@@ -42,7 +45,7 @@ function handleSkip() {
 
 function handleNextRound() {
   guessInput.value = ''
-  nextRound()
+  replayRound()
 }
 
 function handleBackToMenu() {
@@ -63,8 +66,13 @@ useHead({
   <div class="game-container">
     <!-- ── FASE 1: Selezione Modalità ──────────────── -->
     <Transition name="phase" mode="out-in">
-      <div v-if="phase === 'selecting'" key="selecting" class="phase-wrapper">
-        <ModeSelector @start="handleStart" />
+      <!-- Cronologia (Sovrapposta a Selezione) -->
+      <div v-if="phase === 'selecting' && showHistory" key="history" class="phase-wrapper">
+        <GameHistory @close="showHistory = false" />
+      </div>
+
+      <div v-else-if="phase === 'selecting'" key="selecting" class="phase-wrapper">
+        <ModeSelector @start="handleStart" @show-history="showHistory = true" />
       </div>
 
       <!-- ── FASE 2: Gioco ─────────────────────────── -->
@@ -142,6 +150,16 @@ useHead({
       @next-round="handleNextRound"
       @back-to-menu="handleBackToMenu"
     />
+
+    <!-- ── Footer Deezer Attribution ──────────────── -->
+    <footer class="deezer-footer">
+      <span class="deezer-text">Powered by</span>
+      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" aria-label="Deezer">
+        <svg viewBox="0 0 512 512" class="deezer-logo" fill="currentColor">
+          <path d="M112 376v64H16v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm-256-96v64h-96v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm-128-96v64h-96v-64h96zm128 0v64h-96v-64h96zm0-96v64h-96V88h96z"/>
+        </svg>
+      </a>
+    </footer>
   </div>
 </template>
 
@@ -149,14 +167,20 @@ useHead({
 .game-container {
   min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 20px 16px;
+  position: relative;
 }
 
 .phase-wrapper {
   width: 100%;
   max-width: 520px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .game-phase {
@@ -266,10 +290,42 @@ useHead({
   animation: fade-in 0.2s ease reverse;
 }
 
+/* ── Footer ──────── */
+.deezer-footer {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  pointer-events: auto;
+}
+
+.deezer-footer:hover {
+  opacity: 1;
+}
+
+.deezer-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-neu-text-dim);
+}
+
+.deezer-logo {
+  height: 16px;
+  width: auto;
+  color: #fff;
+}
+
 @media (max-width: 480px) {
   .game-container {
-    align-items: flex-start;
+    justify-content: flex-start;
     padding-top: 40px;
+    padding-bottom: 60px; /* Spazio per footer */
   }
 
   .game-phase {

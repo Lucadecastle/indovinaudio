@@ -2,13 +2,15 @@
 import { ref, computed } from 'vue'
 
 const emit = defineEmits<{
-  start: [mode: 'random' | 'genre' | 'artist', filter?: string]
+  start: [mode: 'random' | 'genre' | 'artist' | 'decade', filter?: string]
+  showHistory: []
 }>()
 
-type Mode = 'random' | 'genre' | 'artist'
+type Mode = 'random' | 'genre' | 'artist' | 'decade'
 
 const selectedMode = ref<Mode | null>(null)
 const selectedGenre = ref<string | null>(null)
+const selectedDecade = ref<string | null>(null)
 const artistQuery = ref('')
 const selectedArtistId = ref<number | null>(null)
 const artistSuggestions = ref<{ id: number; name: string; picture: string }[]>([])
@@ -23,6 +25,17 @@ const genres = [
   { id: 'hip-hop', label: 'Hip-Hop', emoji: '🎧' },
   { id: 'dance', label: 'Dance', emoji: '💃' },
   { id: 'r&b', label: 'R&B', emoji: '🎵' },
+]
+
+const decades = [
+  { id: '2020s', label: "Anni '20", emoji: '📱' },
+  { id: '2010s', label: "Anni '10", emoji: '🌐' },
+  { id: '2000s', label: "Anni '00", emoji: '💿' },
+  { id: '90s', label: "Anni '90", emoji: '📼' },
+  { id: '80s', label: "Anni '80", emoji: '🛼' },
+  { id: '70s', label: "Anni '70", emoji: '🪩' },
+  { id: '60s', label: "Anni '60", emoji: '✌️' },
+  { id: '50s', label: "Anni '50", emoji: '📻' },
 ]
 
 const modes = [
@@ -44,11 +57,18 @@ const modes = [
     description: 'Cerca il tuo artista preferito',
     emoji: '🎤',
   },
+  {
+    id: 'decade' as Mode,
+    label: 'Per Periodo',
+    description: 'Scegli un decennio musicale',
+    emoji: '📅',
+  },
 ]
 
 const canStart = computed(() => {
   if (!selectedMode.value) return false
   if (selectedMode.value === 'genre') return !!selectedGenre.value
+  if (selectedMode.value === 'decade') return !!selectedDecade.value
   if (selectedMode.value === 'artist') return !!selectedArtistId.value
   return true
 })
@@ -57,6 +77,7 @@ function selectMode(mode: Mode) {
   selectedMode.value = mode
   // Reset sub-selections
   if (mode !== 'genre') selectedGenre.value = null
+  if (mode !== 'decade') selectedDecade.value = null
   if (mode !== 'artist') {
     artistQuery.value = ''
     selectedArtistId.value = null
@@ -66,6 +87,10 @@ function selectMode(mode: Mode) {
 
 function selectGenre(id: string) {
   selectedGenre.value = id
+}
+
+function selectDecade(id: string) {
+  selectedDecade.value = id
 }
 
 async function searchArtists(query: string) {
@@ -107,9 +132,11 @@ function handleStart() {
   const filter =
     selectedMode.value === 'genre'
       ? selectedGenre.value!
-      : selectedMode.value === 'artist'
-        ? String(selectedArtistId.value)
-        : undefined
+      : selectedMode.value === 'decade'
+        ? selectedDecade.value!
+        : selectedMode.value === 'artist'
+          ? String(selectedArtistId.value)
+          : undefined
 
   emit('start', selectedMode.value, filter)
 }
@@ -117,6 +144,12 @@ function handleStart() {
 
 <template>
   <div class="mode-selector">
+    <div class="header-actions">
+      <button class="history-btn neu-btn neu-flat" @click="emit('showHistory')">
+        <span class="icon">📊</span> Cronologia
+      </button>
+    </div>
+
     <h1 class="title">
       <span class="text-gradient-accent">Indovinaudio</span>
     </h1>
@@ -199,6 +232,26 @@ function handleStart() {
       </div>
     </Transition>
 
+    <!-- Sub-selezione: Periodo -->
+    <Transition name="expand">
+      <div v-if="selectedMode === 'decade'" class="sub-selection animate-slide-up">
+        <p class="sub-label">Scegli un decennio</p>
+        <div class="genre-chips">
+          <button
+            v-for="d in decades"
+            :key="d.id"
+            :id="`decade-${d.id}`"
+            class="genre-chip neu-convex"
+            :class="{ 'genre-chip--active neu-pressed': selectedDecade === d.id }"
+            @click="selectDecade(d.id)"
+          >
+            <span>{{ d.emoji }}</span>
+            <span>{{ d.label }}</span>
+          </button>
+        </div>
+      </div>
+    </Transition>
+
     <!-- Pulsante Start -->
     <Transition name="expand">
       <button
@@ -226,6 +279,28 @@ function handleStart() {
   margin: 0 auto;
 }
 
+.header-actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.history-btn {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-neu-full);
+  color: var(--color-neu-text-muted);
+}
+
+.history-btn .icon {
+  margin-right: 4px;
+}
+
+.history-btn:hover {
+  color: var(--color-neu-text);
+}
+
 .title {
   font-size: 2.8rem;
   font-weight: 800;
@@ -243,7 +318,7 @@ function handleStart() {
 /* ── Mode Cards ────────── */
 .modes-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 14px;
   width: 100%;
 }
