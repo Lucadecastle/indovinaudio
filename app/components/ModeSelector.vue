@@ -21,17 +21,25 @@ const isSearching = ref(false)
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
 const genres = [
-  { id: 'pop', label: 'Pop', icon: 'ph:microphone-stage' },
-  { id: 'rock', label: 'Rock', icon: 'ph:guitar' },
-  { id: 'hip-hop', label: 'Hip-Hop', icon: 'ph:headphones' },
-  { id: 'dance', label: 'Dance', icon: 'ph:speaker-hifi' },
-  { id: 'r&b', label: 'R&B', icon: 'ph:music-notes-simple' },
+  { id: 'pop', label: 'Pop' },
+  { id: 'rock', label: 'Rock' },
+  { id: 'hip-hop', label: 'Hip-Hop' },
+  { id: 'dance', label: 'Dance' },
+  { id: 'r&b', label: 'R&B' },
+  { id: 'alternative', label: 'Alternative' },
+  { id: 'electro', label: 'Electro' },
+  { id: 'folk', label: 'Folk' },
+  { id: 'reggae', label: 'Reggae' },
+  { id: 'jazz', label: 'Jazz' },
+  { id: 'classical', label: 'Classica' },
+  { id: 'latin', label: 'Latina' },
+  { id: 'asian', label: 'Asian Pop' },
 ]
 
 const decades = [
-  { id: '2020s', label: "Anni '20", icon: 'ph:device-mobile' },
-  { id: '2010s', label: "Anni '10", icon: 'ph:globe' },
-  { id: '2000s', label: "Anni '00", icon: 'ph:disc' },
+  { id: '2020s', label: 'Anni 2020', icon: 'ph:device-mobile' },
+  { id: '2010s', label: 'Anni 2010', icon: 'ph:globe' },
+  { id: '2000s', label: 'Anni 2000', icon: 'ph:disc' },
   { id: '90s', label: "Anni '90", icon: 'ph:cassette-tape' },
   { id: '80s', label: "Anni '80", icon: 'ph:roller-skates' },
   { id: '70s', label: "Anni '70", icon: 'ph:vinyl-record' },
@@ -40,12 +48,18 @@ const decades = [
 ]
 
 const countries = [
-  { id: 'italia', label: 'Italia', icon: 'ph:flag' },
-  { id: 'usa', label: 'USA', icon: 'ph:flag-banner' },
-  { id: 'uk', label: 'UK', icon: 'ph:crown' },
-  { id: 'france', label: 'Francia', icon: 'ph:wine' },
-  { id: 'spain', label: 'Spagna', icon: 'ph:sun' },
-  { id: 'germany', label: 'Germania', icon: 'ph:beer-stein' },
+  { id: 'italia', label: '🇮🇹 Italia' },
+  { id: 'usa', label: '🇺🇸 Stati Uniti' },
+  { id: 'uk', label: '🇬🇧 Regno Unito' },
+  { id: 'france', label: '🇫🇷 Francia' },
+  { id: 'spain', label: '🇪🇸 Spagna' },
+  { id: 'germany', label: '🇩🇪 Germania' },
+  { id: 'brazil', label: '🇧🇷 Brasile' },
+  { id: 'mexico', label: '🇲🇽 Messico' },
+  { id: 'japan', label: '🇯🇵 Giappone' },
+  { id: 'canada', label: '🇨🇦 Canada' },
+  { id: 'australia', label: '🇦🇺 Australia' },
+  { id: 'korea', label: '🇰🇷 Corea del Sud' },
 ]
 
 const modes = [
@@ -205,18 +219,13 @@ function handleStart() {
         <!-- Sub-selezione: Genere -->
         <div v-if="selectedMode === 'genre'" class="sub-selection">
           <p class="sub-label">Scegli un genere</p>
-          <div class="genre-chips">
-            <button
-              v-for="g in genres"
-              :key="g.id"
-              :id="`genre-${g.id}`"
-              class="genre-chip neu-convex"
-              :class="{ 'genre-chip--active neu-pressed': selectedGenre === g.id }"
-              @click="selectGenre(g.id)"
-            >
-              <Icon :name="g.icon" />
-              <span>{{ g.label }}</span>
-            </button>
+          <div class="select-wrapper">
+            <select id="genre-select" v-model="selectedGenre" class="neu-input">
+              <option :value="null" disabled>Seleziona un genere...</option>
+              <option v-for="g in genres" :key="g.id" :value="g.id">
+                {{ g.label }}
+              </option>
+            </select>
           </div>
         </div>
 
@@ -280,18 +289,13 @@ function handleStart() {
         <!-- Sub-selezione: Nazione -->
         <div v-else-if="selectedMode === 'country'" class="sub-selection">
           <p class="sub-label">Scegli una nazione</p>
-          <div class="genre-chips">
-            <button
-              v-for="c in countries"
-              :key="c.id"
-              :id="`country-${c.id}`"
-              class="genre-chip neu-convex"
-              :class="{ 'genre-chip--active neu-pressed': selectedCountry === c.id }"
-              @click="selectCountry(c.id)"
-            >
-              <Icon :name="c.icon" />
-              <span>{{ c.label }}</span>
-            </button>
+          <div class="select-wrapper">
+            <select id="country-select" v-model="selectedCountry" class="neu-input">
+              <option :value="null" disabled>Seleziona una nazione...</option>
+              <option v-for="c in countries" :key="c.id" :value="c.id">
+                {{ c.label }}
+              </option>
+            </select>
           </div>
         </div>
 
@@ -430,6 +434,28 @@ function handleStart() {
   flex-direction: column;
   align-items: center;
   gap: 14px;
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select-wrapper::after {
+  content: '▼';
+  font-size: 0.8rem;
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--color-neu-accent);
+}
+
+select.neu-input {
+  cursor: pointer;
+  appearance: none;
+  padding-right: 40px;
 }
 
 .sub-label {

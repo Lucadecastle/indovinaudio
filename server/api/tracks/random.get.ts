@@ -7,6 +7,14 @@ const GENRE_MAP: Record<string, number> = {
   'hip-hop': 116,
   dance: 113,
   'r&b': 165,
+  alternative: 85,
+  electro: 106,
+  folk: 466,
+  reggae: 144,
+  jazz: 129,
+  classical: 98,
+  latin: 457,
+  asian: 16,
 }
 
 /** Mappa decenni → search query generica per hit */
@@ -29,6 +37,12 @@ const COUNTRY_MAP: Record<string, string> = {
   france: 'top 50 france',
   spain: 'top 50 spain',
   germany: 'top 50 germany',
+  brazil: 'top 50 brazil',
+  mexico: 'top 50 mexico',
+  japan: 'top 50 japan',
+  canada: 'top 50 canada',
+  australia: 'top 50 australia',
+  korea: 'top 50 south korea',
 }
 
 interface DeezerTrack {
