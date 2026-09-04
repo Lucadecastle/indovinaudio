@@ -60,7 +60,7 @@ function handleSelectSuggestion(value: string) {
 }
 
 useHead({
-  title: 'Indovinaudio — Riconosci il brano!',
+  title: 'Indovinaudio - Riconosci il brano!',
 })
 </script>
 

@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'it' },
-      title: 'Indovinaudio — Riconosci il brano!',
+      title: 'Indovinaudio - Riconosci il brano!',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },

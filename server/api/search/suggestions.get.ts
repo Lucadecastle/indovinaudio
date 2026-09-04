@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
 
     return (response.data || []).map((t) => ({
       id: t.id,
-      name: `${t.title_short || t.title} — ${t.artist.name}`,
+      name: `${t.title_short || t.title} - ${t.artist.name}`,
       title: t.title_short || t.title,
       artist: t.artist.name,
     }))
