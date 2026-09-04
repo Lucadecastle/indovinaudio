@@ -175,7 +175,10 @@ function handleStart() {
     </div>
 
     <div class="logo-wrapper">
-      <img src="/logo.svg" alt="Indovinaudio" class="main-logo" />
+      <img src="/logo.svg" alt="Logo" class="main-logo" />
+      <h1 class="title">
+        <span class="text-gradient-accent">Indovinaudio</span>
+      </h1>
     </div>
     <p class="subtitle">Riconosci il brano dal frammento sonoro</p>
 
@@ -195,10 +198,12 @@ function handleStart() {
       </button>
     </div>
 
-    <div class="sub-selections-container">
-      <Transition name="expand">
+    <!-- Sub-selections Container -->
+    <Transition name="expand">
+      <div v-if="selectedMode" class="sub-selections-wrapper">
+        
         <!-- Sub-selezione: Genere -->
-        <div v-if="selectedMode === 'genre'" key="genre" class="sub-selection animate-slide-up">
+        <div v-if="selectedMode === 'genre'" class="sub-selection">
           <p class="sub-label">Scegli un genere</p>
           <div class="genre-chips">
             <button
@@ -216,7 +221,7 @@ function handleStart() {
         </div>
 
         <!-- Sub-selezione: Artista -->
-        <div v-else-if="selectedMode === 'artist'" key="artist" class="sub-selection animate-slide-up">
+        <div v-else-if="selectedMode === 'artist'" class="sub-selection">
           <p class="sub-label">Cerca un artista</p>
           <div class="artist-search-wrapper">
             <input
@@ -230,7 +235,7 @@ function handleStart() {
               @focus="showArtistDropdown = artistSuggestions.length > 0"
               @blur="setTimeout(() => (showArtistDropdown = false), 200)"
             />
-            <Transition name="expand">
+            <Transition name="fade">
               <ul
                 v-if="showArtistDropdown"
                 class="suggestions-dropdown neu-surface"
@@ -255,7 +260,7 @@ function handleStart() {
         </div>
 
         <!-- Sub-selezione: Periodo -->
-        <div v-else-if="selectedMode === 'decade'" key="decade" class="sub-selection animate-slide-up">
+        <div v-else-if="selectedMode === 'decade'" class="sub-selection">
           <p class="sub-label">Scegli un decennio</p>
           <div class="genre-chips">
             <button
@@ -273,7 +278,7 @@ function handleStart() {
         </div>
 
         <!-- Sub-selezione: Nazione -->
-        <div v-else-if="selectedMode === 'country'" key="country" class="sub-selection animate-slide-up">
+        <div v-else-if="selectedMode === 'country'" class="sub-selection">
           <p class="sub-label">Scegli una nazione</p>
           <div class="genre-chips">
             <button
@@ -289,21 +294,17 @@ function handleStart() {
             </button>
           </div>
         </div>
-      </Transition>
-    </div>
 
-    <!-- Pulsante Start -->
-    <Transition name="expand">
-      <button
-        v-if="selectedMode"
-        id="start-game-btn"
-        class="start-btn neu-btn neu-btn-primary"
-        :class="{ 'neu-convex': true }"
-        :disabled="!canStart"
-        @click="handleStart"
-      >
-        <Icon name="ph:rocket-launch" class="start-icon" /> Inizia la sfida
-      </button>
+        <!-- Pulsante Start -->
+        <button
+          id="start-game-btn"
+          class="neu-btn neu-btn-primary start-btn"
+          :disabled="!canStart"
+          @click="handleStart"
+        >
+          <Icon name="ph:rocket-launch" class="start-icon" /> Inizia la sfida
+        </button>
+      </div>
     </Transition>
   </div>
 </template>
@@ -348,13 +349,21 @@ function handleStart() {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 12px;
   margin-bottom: 4px;
 }
 
 .main-logo {
-  height: 52px;
+  height: 48px;
   width: auto;
-  filter: drop-shadow(0 4px 12px rgba(196, 255, 28, 0.2));
+  filter: drop-shadow(0 4px 12px rgba(196, 255, 28, 0.15));
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
 }
 
 .subtitle {
@@ -406,13 +415,15 @@ function handleStart() {
 }
 
 /* ── Sub Selections ────── */
-.sub-selections-container {
-  display: grid;
+.sub-selections-wrapper {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .sub-selection {
-  grid-area: 1 / 1;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -520,8 +531,16 @@ function handleStart() {
 
 /* ── Responsive ────── */
 @media (max-width: 480px) {
+  .logo-wrapper {
+    gap: 8px;
+  }
+
   .main-logo {
-    height: 42px;
+    height: 32px;
+  }
+
+  .title {
+    font-size: 1.8rem;
   }
 
   .modes-grid {
