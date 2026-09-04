@@ -174,9 +174,9 @@ function handleStart() {
       </button>
     </div>
 
-    <h1 class="title">
-      <span class="text-gradient-accent">Indovinaudio</span>
-    </h1>
+    <div class="logo-wrapper">
+      <img src="/logo.svg" alt="Indovinaudio" class="main-logo" />
+    </div>
     <p class="subtitle">Riconosci il brano dal frammento sonoro</p>
 
     <!-- Modalità -->
@@ -344,11 +344,17 @@ function handleStart() {
   color: var(--color-neu-text);
 }
 
-.title {
-  font-size: 2.8rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  text-align: center;
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.main-logo {
+  height: 52px;
+  width: auto;
+  filter: drop-shadow(0 4px 12px rgba(196, 255, 28, 0.2));
 }
 
 .subtitle {
@@ -514,8 +520,8 @@ function handleStart() {
 
 /* ── Responsive ────── */
 @media (max-width: 480px) {
-  .title {
-    font-size: 2.2rem;
+  .main-logo {
+    height: 42px;
   }
 
   .modes-grid {

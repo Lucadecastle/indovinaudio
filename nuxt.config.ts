@@ -19,12 +19,11 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        {
-          name: 'description',
-          content:
-            'Indovinaudio: ascolta frammenti sonori progressivi e indovina il brano famoso. Sfida musicale con punteggio e modalità multiple.',
-        },
+        { name: 'description', content: 'Indovinaudio: ascolta frammenti sonori progressivi e indovina il brano famoso. Sfida musicale con punteggio e modalità multiple.' },
         { name: 'theme-color', content: '#1a1d21' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+        { name: 'apple-mobile-web-app-title', content: 'Indovinaudio' },
         { property: 'og:title', content: 'Indovinaudio — Riconosci il brano!' },
         {
           property: 'og:description',
@@ -34,10 +33,10 @@ export default defineNuxtConfig({
         { property: 'og:type', content: 'website' },
       ],
       link: [
-        {
-          rel: 'preconnect',
-          href: 'https://fonts.googleapis.com',
-        },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: 'manifest', href: '/manifest.json' },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         {
           rel: 'preconnect',
           href: 'https://fonts.gstatic.com',

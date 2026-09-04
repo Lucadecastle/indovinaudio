@@ -13,8 +13,8 @@
   --color-neu-text: #e4e8ef;
   --color-neu-text-muted: #8a919c;
   --color-neu-text-dim: #5a6170;
-  --color-neu-accent: #6c5ce7;
-  --color-neu-accent-light: #a29bfe;
+  --color-neu-accent: #c4ff1c;
+  --color-neu-accent-light: #539114;
   --color-neu-success: #00cec9;
   --color-neu-error: #fd7272;
   --color-neu-warning: #fbc531;
@@ -133,15 +133,15 @@ body {
 
 .neu-btn-primary {
   background: linear-gradient(135deg, var(--color-neu-accent), var(--color-neu-accent-light));
-  color: #fff;
+  color: var(--color-neu-bg);
   box-shadow:
-    4px 4px 12px rgba(108, 92, 231, 0.35),
+    4px 4px 12px rgba(196, 255, 28, 0.25),
     -4px -4px 12px var(--shadow-neu-light);
 }
 
 .neu-btn-primary:hover:not(:disabled) {
   box-shadow:
-    6px 6px 18px rgba(108, 92, 231, 0.45),
+    6px 6px 18px rgba(196, 255, 28, 0.35),
     -6px -6px 18px var(--shadow-neu-light);
   transform: translateY(-1px);
 }
@@ -149,7 +149,7 @@ body {
 .neu-btn-primary:active:not(:disabled) {
   box-shadow:
     inset 3px 3px 8px rgba(0, 0, 0, 0.35),
-    inset -3px -3px 8px rgba(162, 155, 254, 0.12);
+    inset -3px -3px 8px rgba(83, 145, 20, 0.3);
   transform: translateY(0);
 }
 
@@ -179,7 +179,7 @@ body {
   box-shadow:
     inset 3px 3px 8px var(--shadow-neu-inset-dark),
     inset -3px -3px 8px var(--shadow-neu-inset-light),
-    0 0 0 3px rgba(108, 92, 231, 0.15);
+    0 0 0 3px rgba(196, 255, 28, 0.15);
 }
 
 /* ─── Animations ───────────────────────────────────────────── */
