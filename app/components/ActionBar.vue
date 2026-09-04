@@ -8,11 +8,21 @@ defineProps<{
 const emit = defineEmits<{
   skip: []
   submit: []
+  surrender: []
 }>()
 </script>
 
 <template>
   <div class="action-bar">
+    <button
+      id="surrender-btn"
+      class="neu-btn neu-flat action-btn action-btn--surrender"
+      @click="emit('surrender')"
+    >
+      <Icon name="ph:flag" class="btn-icon" />
+      <span>Arrenditi</span>
+    </button>
+
     <button
       id="skip-btn"
       class="neu-btn neu-convex action-btn action-btn--skip"
@@ -45,9 +55,18 @@ const emit = defineEmits<{
 
 .action-btn {
   flex: 1;
-  padding: 14px 20px;
+  padding: 14px 0;
   border-radius: var(--radius-neu);
   font-size: 0.95rem;
+}
+
+.action-btn--surrender {
+  color: var(--color-neu-error);
+  flex: 0.8;
+}
+
+.action-btn--submit {
+  flex: 1.2;
 }
 
 .btn-icon {

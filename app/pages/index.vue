@@ -24,6 +24,7 @@ const {
   skip,
   guess,
   nextRound,
+  surrender,
 } = useAudioRound()
 
 const guessInput = ref('')
@@ -57,6 +58,11 @@ function handleBackToMenu() {
 
 function handleSelectSuggestion(value: string) {
   guessInput.value = value
+}
+
+function handleSurrender() {
+  guessInput.value = ''
+  surrender()
 }
 
 useHead({
@@ -136,6 +142,7 @@ useHead({
             :is-last-step="isLastStep"
             @skip="handleSkip"
             @submit="handleGuessSubmit()"
+            @surrender="handleSurrender"
           />
         </template>
       </div>

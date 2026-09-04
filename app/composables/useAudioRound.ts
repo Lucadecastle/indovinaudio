@@ -229,6 +229,12 @@ export function useAudioRound() {
     }
   }
 
+  function surrender() {
+    if (phase.value === 'playing') {
+      endRound('lose', 0)
+    }
+  }
+
   function nextRound() {
     cleanupAudio()
     phase.value = 'selecting'
@@ -297,6 +303,7 @@ export function useAudioRound() {
     play,
     skip,
     guess,
+    surrender,
     nextRound,
     stopPlayback,
   }
