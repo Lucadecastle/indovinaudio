@@ -347,16 +347,17 @@ function handleStart() {
 
 .logo-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 4px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .main-logo {
-  height: 48px;
+  height: 72px;
   width: auto;
-  filter: drop-shadow(0 4px 12px rgba(196, 255, 28, 0.15));
+  filter: drop-shadow(0 6px 16px rgba(196, 255, 28, 0.2));
 }
 
 .title {
@@ -536,7 +537,7 @@ function handleStart() {
   }
 
   .main-logo {
-    height: 32px;
+    height: 56px;
   }
 
   .title {
