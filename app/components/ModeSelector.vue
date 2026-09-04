@@ -2,15 +2,16 @@
 import { ref, computed } from 'vue'
 
 const emit = defineEmits<{
-  start: [mode: 'random' | 'genre' | 'artist' | 'decade', filter?: string]
+  start: [mode: 'random' | 'genre' | 'artist' | 'decade' | 'country', filter?: string]
   showHistory: []
 }>()
 
-type Mode = 'random' | 'genre' | 'artist' | 'decade'
+type Mode = 'random' | 'genre' | 'artist' | 'decade' | 'country'
 
 const selectedMode = ref<Mode | null>(null)
 const selectedGenre = ref<string | null>(null)
 const selectedDecade = ref<string | null>(null)
+const selectedCountry = ref<string | null>(null)
 const artistQuery = ref('')
 const selectedArtistId = ref<number | null>(null)
 const artistSuggestions = ref<{ id: number; name: string; picture: string }[]>([])
@@ -20,22 +21,31 @@ const isSearching = ref(false)
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
 const genres = [
-  { id: 'pop', label: 'Pop', emoji: '🎤' },
-  { id: 'rock', label: 'Rock', emoji: '🎸' },
-  { id: 'hip-hop', label: 'Hip-Hop', emoji: '🎧' },
-  { id: 'dance', label: 'Dance', emoji: '💃' },
-  { id: 'r&b', label: 'R&B', emoji: '🎵' },
+  { id: 'pop', label: 'Pop', icon: 'ph:microphone-stage' },
+  { id: 'rock', label: 'Rock', icon: 'ph:guitar' },
+  { id: 'hip-hop', label: 'Hip-Hop', icon: 'ph:headphones' },
+  { id: 'dance', label: 'Dance', icon: 'ph:speaker-hifi' },
+  { id: 'r&b', label: 'R&B', icon: 'ph:music-notes-simple' },
 ]
 
 const decades = [
-  { id: '2020s', label: "Anni '20", emoji: '📱' },
-  { id: '2010s', label: "Anni '10", emoji: '🌐' },
-  { id: '2000s', label: "Anni '00", emoji: '💿' },
-  { id: '90s', label: "Anni '90", emoji: '📼' },
-  { id: '80s', label: "Anni '80", emoji: '🛼' },
-  { id: '70s', label: "Anni '70", emoji: '🪩' },
-  { id: '60s', label: "Anni '60", emoji: '✌️' },
-  { id: '50s', label: "Anni '50", emoji: '📻' },
+  { id: '2020s', label: "Anni '20", icon: 'ph:device-mobile' },
+  { id: '2010s', label: "Anni '10", icon: 'ph:globe' },
+  { id: '2000s', label: "Anni '00", icon: 'ph:disc' },
+  { id: '90s', label: "Anni '90", icon: 'ph:cassette-tape' },
+  { id: '80s', label: "Anni '80", icon: 'ph:roller-skates' },
+  { id: '70s', label: "Anni '70", icon: 'ph:vinyl-record' },
+  { id: '60s', label: "Anni '60", icon: 'ph:peace' },
+  { id: '50s', label: "Anni '50", icon: 'ph:radio' },
+]
+
+const countries = [
+  { id: 'italia', label: 'Italia', icon: 'ph:flag' },
+  { id: 'usa', label: 'USA', icon: 'ph:flag-banner' },
+  { id: 'uk', label: 'UK', icon: 'ph:crown' },
+  { id: 'france', label: 'Francia', icon: 'ph:wine' },
+  { id: 'spain', label: 'Spagna', icon: 'ph:sun' },
+  { id: 'germany', label: 'Germania', icon: 'ph:beer-stein' },
 ]
 
 const modes = [
@@ -43,25 +53,31 @@ const modes = [
     id: 'random' as Mode,
     label: 'Casuale',
     description: 'Una traccia dalla Top Chart',
-    emoji: '🎲',
+    icon: 'ph:dice-five',
   },
   {
     id: 'genre' as Mode,
     label: 'Per Genere',
     description: 'Scegli una macro-categoria',
-    emoji: '🎶',
+    icon: 'ph:playlist',
   },
   {
     id: 'artist' as Mode,
     label: 'Per Artista',
     description: 'Cerca il tuo artista preferito',
-    emoji: '🎤',
+    icon: 'ph:user',
   },
   {
     id: 'decade' as Mode,
     label: 'Per Periodo',
     description: 'Scegli un decennio musicale',
-    emoji: '📅',
+    icon: 'ph:calendar-blank',
+  },
+  {
+    id: 'country' as Mode,
+    label: 'Per Nazione',
+    description: 'Le hit di un paese specifico',
+    icon: 'ph:map-pin',
   },
 ]
 
@@ -69,6 +85,7 @@ const canStart = computed(() => {
   if (!selectedMode.value) return false
   if (selectedMode.value === 'genre') return !!selectedGenre.value
   if (selectedMode.value === 'decade') return !!selectedDecade.value
+  if (selectedMode.value === 'country') return !!selectedCountry.value
   if (selectedMode.value === 'artist') return !!selectedArtistId.value
   return true
 })
@@ -78,6 +95,7 @@ function selectMode(mode: Mode) {
   // Reset sub-selections
   if (mode !== 'genre') selectedGenre.value = null
   if (mode !== 'decade') selectedDecade.value = null
+  if (mode !== 'country') selectedCountry.value = null
   if (mode !== 'artist') {
     artistQuery.value = ''
     selectedArtistId.value = null
@@ -91,6 +109,10 @@ function selectGenre(id: string) {
 
 function selectDecade(id: string) {
   selectedDecade.value = id
+}
+
+function selectCountry(id: string) {
+  selectedCountry.value = id
 }
 
 async function searchArtists(query: string) {
@@ -134,9 +156,11 @@ function handleStart() {
       ? selectedGenre.value!
       : selectedMode.value === 'decade'
         ? selectedDecade.value!
-        : selectedMode.value === 'artist'
-          ? String(selectedArtistId.value)
-          : undefined
+        : selectedMode.value === 'country'
+          ? selectedCountry.value!
+          : selectedMode.value === 'artist'
+            ? String(selectedArtistId.value)
+            : undefined
 
   emit('start', selectedMode.value, filter)
 }
@@ -146,7 +170,7 @@ function handleStart() {
   <div class="mode-selector">
     <div class="header-actions">
       <button class="history-btn neu-btn neu-flat" @click="emit('showHistory')">
-        <span class="icon">📊</span> Cronologia
+        <Icon name="ph:chart-bar" class="icon" /> Cronologia
       </button>
     </div>
 
@@ -165,14 +189,14 @@ function handleStart() {
         :class="{ 'mode-card--active neu-pressed': selectedMode === mode.id }"
         @click="selectMode(mode.id)"
       >
-        <span class="mode-emoji">{{ mode.emoji }}</span>
+        <Icon :name="mode.icon" class="mode-emoji" />
         <span class="mode-label">{{ mode.label }}</span>
         <span class="mode-desc">{{ mode.description }}</span>
       </button>
     </div>
 
     <!-- Sub-selezione: Genere -->
-    <Transition name="expand">
+    <Transition name="expand" mode="out-in">
       <div v-if="selectedMode === 'genre'" class="sub-selection animate-slide-up">
         <p class="sub-label">Scegli un genere</p>
         <div class="genre-chips">
@@ -184,7 +208,7 @@ function handleStart() {
             :class="{ 'genre-chip--active neu-pressed': selectedGenre === g.id }"
             @click="selectGenre(g.id)"
           >
-            <span>{{ g.emoji }}</span>
+            <Icon :name="g.icon" />
             <span>{{ g.label }}</span>
           </button>
         </div>
@@ -192,7 +216,7 @@ function handleStart() {
     </Transition>
 
     <!-- Sub-selezione: Artista -->
-    <Transition name="expand">
+    <Transition name="expand" mode="out-in">
       <div v-if="selectedMode === 'artist'" class="sub-selection animate-slide-up">
         <p class="sub-label">Cerca un artista</p>
         <div class="artist-search-wrapper">
@@ -233,7 +257,7 @@ function handleStart() {
     </Transition>
 
     <!-- Sub-selezione: Periodo -->
-    <Transition name="expand">
+    <Transition name="expand" mode="out-in">
       <div v-if="selectedMode === 'decade'" class="sub-selection animate-slide-up">
         <p class="sub-label">Scegli un decennio</p>
         <div class="genre-chips">
@@ -245,15 +269,35 @@ function handleStart() {
             :class="{ 'genre-chip--active neu-pressed': selectedDecade === d.id }"
             @click="selectDecade(d.id)"
           >
-            <span>{{ d.emoji }}</span>
+            <Icon :name="d.icon" />
             <span>{{ d.label }}</span>
           </button>
         </div>
       </div>
     </Transition>
 
+    <!-- Sub-selezione: Nazione -->
+    <Transition name="expand" mode="out-in">
+      <div v-if="selectedMode === 'country'" class="sub-selection animate-slide-up">
+        <p class="sub-label">Scegli una nazione</p>
+        <div class="genre-chips">
+          <button
+            v-for="c in countries"
+            :key="c.id"
+            :id="`country-${c.id}`"
+            class="genre-chip neu-convex"
+            :class="{ 'genre-chip--active neu-pressed': selectedCountry === c.id }"
+            @click="selectCountry(c.id)"
+          >
+            <Icon :name="c.icon" />
+            <span>{{ c.label }}</span>
+          </button>
+        </div>
+      </div>
+    </Transition>
+
     <!-- Pulsante Start -->
-    <Transition name="expand">
+    <Transition name="expand" mode="out-in">
       <button
         v-if="selectedMode"
         id="start-game-btn"
@@ -262,7 +306,7 @@ function handleStart() {
         :disabled="!canStart"
         @click="handleStart"
       >
-        🚀 Inizia la sfida
+        <Icon name="ph:rocket-launch" class="start-icon" /> Inizia la sfida
       </button>
     </Transition>
   </div>
@@ -291,10 +335,13 @@ function handleStart() {
   font-weight: 600;
   border-radius: var(--radius-neu-full);
   color: var(--color-neu-text-muted);
+  display: flex;
+  align-items: center;
 }
 
 .history-btn .icon {
-  margin-right: 4px;
+  margin-right: 6px;
+  font-size: 1.1rem;
 }
 
 .history-btn:hover {
@@ -340,6 +387,8 @@ function handleStart() {
 
 .mode-emoji {
   font-size: 2rem;
+  color: var(--color-neu-text);
+  margin-bottom: 4px;
 }
 
 .mode-label {
@@ -442,6 +491,14 @@ function handleStart() {
   padding: 16px 48px;
   font-size: 1.1rem;
   border-radius: var(--radius-neu-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.start-icon {
+  font-size: 1.3rem;
 }
 
 /* ── Transitions ────── */

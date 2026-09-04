@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useAudioRound, STEPS } from '~/composables/useAudioRound'
 import type { GameMode } from '~/composables/useAudioRound'
 import GameHistory from '~/components/GameHistory.vue'
+import CreditsModal from '~/components/CreditsModal.vue'
 
 const {
   track,
@@ -27,6 +28,7 @@ const {
 
 const guessInput = ref('')
 const showHistory = ref(false)
+const showCredits = ref(false)
 
 function handleStart(mode: GameMode, filter?: string) {
   startRound(mode, filter)
@@ -85,9 +87,7 @@ useHead({
             @click="handleBackToMenu"
             aria-label="Torna al menu"
           >
-            <svg viewBox="0 0 24 24" fill="currentColor" class="back-icon">
-              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-            </svg>
+            <Icon name="ph:arrow-left-bold" class="back-icon" />
           </button>
           <div class="points-badge neu-concave">
             <span class="points-label">Punti in palio</span>
@@ -151,14 +151,14 @@ useHead({
       @back-to-menu="handleBackToMenu"
     />
 
-    <!-- ── Footer Deezer Attribution ──────────────── -->
-    <footer class="deezer-footer">
-      <span class="deezer-text">Powered by</span>
-      <a href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" aria-label="Deezer">
-        <svg viewBox="0 0 512 512" class="deezer-logo" fill="currentColor">
-          <path d="M112 376v64H16v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm-256-96v64h-96v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm-128-96v64h-96v-64h96zm128 0v64h-96v-64h96zm0-96v64h-96V88h96z"/>
-        </svg>
-      </a>
+    <!-- Modale Credits -->
+    <CreditsModal :show="showCredits" @close="showCredits = false" />
+
+    <!-- ── Footer ──────────────── -->
+    <footer class="game-footer">
+      <button class="credits-btn" @click="showCredits = true">
+        <Icon name="ph:info" class="credits-icon" /> Credits & Info
+      </button>
     </footer>
   </div>
 </template>
@@ -214,8 +214,7 @@ useHead({
 }
 
 .back-icon {
-  width: 24px;
-  height: 24px;
+  font-size: 1.5rem;
 }
 
 .points-badge {
@@ -291,34 +290,41 @@ useHead({
 }
 
 /* ── Footer ──────── */
-.deezer-footer {
+.game-footer {
   position: absolute;
-  bottom: 12px;
+  bottom: 16px;
   left: 0;
   right: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  opacity: 0.5;
-  transition: opacity 0.2s;
   pointer-events: auto;
 }
 
-.deezer-footer:hover {
-  opacity: 1;
-}
-
-.deezer-text {
-  font-size: 0.75rem;
-  font-weight: 600;
+.credits-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: var(--color-neu-text-dim);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s, color 0.2s;
+  padding: 8px 16px;
+  border-radius: var(--radius-neu-full);
 }
 
-.deezer-logo {
-  height: 16px;
-  width: auto;
-  color: #fff;
+.credits-btn:hover {
+  opacity: 1;
+  color: var(--color-neu-text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.credits-icon {
+  font-size: 1.1rem;
 }
 
 @media (max-width: 480px) {

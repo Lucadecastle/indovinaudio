@@ -21,6 +21,16 @@ const DECADE_MAP: Record<string, string> = {
   '50s': 'hits 50s',
 }
 
+/** Mappa nazioni → search query generica per top */
+const COUNTRY_MAP: Record<string, string> = {
+  italia: 'top 50 italia',
+  usa: 'top 50 usa',
+  uk: 'top 50 uk',
+  france: 'top 50 france',
+  spain: 'top 50 spain',
+  germany: 'top 50 germany',
+}
+
 interface DeezerTrack {
   id: number
   title: string
@@ -45,6 +55,7 @@ export default defineEventHandler(async (event) => {
   const genre = (query.genre as string)?.toLowerCase()
   const artistId = query.artistId as string
   const decade = query.decade as string
+  const country = query.country as string
 
   let apiUrl: string
 
@@ -55,6 +66,10 @@ export default defineEventHandler(async (event) => {
   } else if (decade && DECADE_MAP[decade]) {
     // Modalità "Per Periodo": usa una search query per hit di quel periodo
     const encoded = encodeURIComponent(DECADE_MAP[decade])
+    apiUrl = `https://api.deezer.com/search/track?q=${encoded}&order=RATING_DESC&limit=80`
+  } else if (country && COUNTRY_MAP[country]) {
+    // Modalità "Per Nazione": cerca hit del paese
+    const encoded = encodeURIComponent(COUNTRY_MAP[country])
     apiUrl = `https://api.deezer.com/search/track?q=${encoded}&order=RATING_DESC&limit=80`
   } else if (genre && GENRE_MAP[genre]) {
     // Modalità "Per Genere": top chart di quel genere

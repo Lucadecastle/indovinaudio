@@ -25,14 +25,11 @@ const emit = defineEmits<{
       @click="emit('play')"
     >
       <!-- Play icon -->
-      <svg
+      <Icon
         v-if="!isPlaying"
+        name="ph:play-fill"
         class="play-icon"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
-        <path d="M8 5v14l11-7z" />
-      </svg>
+      />
 
       <!-- Equalizer animation quando in riproduzione -->
       <div v-else class="equalizer">

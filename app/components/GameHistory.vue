@@ -39,10 +39,7 @@ function getModeLabel(mode: string, filter?: string) {
     <div class="panel-header">
       <h2 class="panel-title">Cronologia Partite</h2>
       <button class="close-btn neu-btn neu-flat" @click="emit('close')" aria-label="Chiudi">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
+        <Icon name="ph:x-bold" class="icon" />
       </button>
     </div>
 
@@ -73,12 +70,8 @@ function getModeLabel(mode: string, filter?: string) {
               class="result-indicator" 
               :class="record.result === 'win' ? 'result-win' : 'result-lose'"
             >
-              <svg v-if="record.result === 'win'" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-              </svg>
-              <svg v-else viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-              </svg>
+              <Icon v-if="record.result === 'win'" name="ph:check-bold" />
+              <Icon v-else name="ph:x-bold" />
             </div>
             <div class="item-details">
               <div class="track-name">{{ record.trackTitle }}</div>
@@ -221,8 +214,7 @@ function getModeLabel(mode: string, filter?: string) {
 }
 
 .result-indicator svg {
-  width: 16px;
-  height: 16px;
+  font-size: 1.1rem;
   color: #fff;
 }
 

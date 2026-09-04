@@ -19,9 +19,7 @@ const emit = defineEmits<{
       :disabled="!canSkip"
       @click="emit('skip')"
     >
-      <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
-      </svg>
+      <Icon name="ph:skip-forward-fill" class="btn-icon" />
       <span>Salta</span>
     </button>
 
@@ -31,9 +29,7 @@ const emit = defineEmits<{
       :disabled="!canSubmit"
       @click="emit('submit')"
     >
-      <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-      </svg>
+      <Icon name="ph:check-circle-fill" class="btn-icon" />
       <span>Conferma</span>
     </button>
   </div>

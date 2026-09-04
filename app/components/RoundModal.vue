@@ -130,14 +130,14 @@ const confettiPieces = Array.from({ length: 30 }, (_, i) => ({
             class="neu-btn neu-btn-primary modal-btn modal-btn--primary"
             @click="emit('nextRound')"
           >
-            🎵 Prossima Canzone
+            <Icon name="ph:music-notes" class="btn-icon" /> Prossima Canzone
           </button>
           <button
             id="back-menu-btn"
             class="neu-btn neu-convex modal-btn modal-btn--secondary"
             @click="emit('backToMenu')"
           >
-            Torna al Menu
+            <Icon name="ph:house" class="btn-icon" /> Torna al Menu
           </button>
         </div>
       </div>
@@ -297,6 +297,14 @@ const confettiPieces = Array.from({ length: 30 }, (_, i) => ({
   padding: 14px;
   border-radius: var(--radius-neu);
   font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-icon {
+  font-size: 1.2rem;
 }
 
 .modal-btn--secondary {

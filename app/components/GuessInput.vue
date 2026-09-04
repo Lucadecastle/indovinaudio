@@ -96,10 +96,7 @@ watch(model, (val) => {
 <template>
   <div class="guess-input-wrapper">
     <div class="input-container">
-      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8" />
-        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      </svg>
+      <Icon name="ph:magnifying-glass" class="input-icon" />
       <input
         id="guess-input"
         v-model="model"
@@ -127,9 +124,7 @@ watch(model, (val) => {
           :class="{ 'suggestion-item--highlight': i === highlightIndex }"
           @mousedown.prevent="selectItem(item)"
         >
-          <svg class="suggestion-icon" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55C7.79 13 6 14.79 6 17s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-          </svg>
+          <Icon name="ph:music-notes" class="suggestion-icon" />
           <span class="suggestion-text">{{ item.name }}</span>
         </li>
       </ul>

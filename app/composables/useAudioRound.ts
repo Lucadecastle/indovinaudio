@@ -14,7 +14,7 @@ export interface Track {
 
 export type GamePhase = 'selecting' | 'playing' | 'result'
 export type GameResult = 'win' | 'lose' | null
-export type GameMode = 'random' | 'genre' | 'artist' | 'decade'
+export type GameMode = 'random' | 'genre' | 'artist' | 'decade' | 'country'
 
 /* ─── Constants ────────────────────────────────────────────── */
 export const STEPS = [
@@ -83,6 +83,7 @@ export function useAudioRound() {
       if (mode === 'genre' && filter) params.set('genre', filter)
       if (mode === 'artist' && filter) params.set('artistId', filter)
       if (mode === 'decade' && filter) params.set('decade', filter)
+      if (mode === 'country' && filter) params.set('country', filter)
 
       lastMode.value = mode
       lastFilter.value = filter || null
