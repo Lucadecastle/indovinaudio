@@ -156,20 +156,20 @@ useHead({
 
     <!-- ── Footer ──────────────── -->
     <footer class="game-footer">
-      <!-- Sezione sinistra: Credits Modal -->
-      <button class="credits-btn" @click="showCredits = true">
-        <Icon name="ph:info" class="credits-icon" /> Credits & Info
-      </button>
 
-      <div class="footer-divider" />
-
-      <!-- Sezione destra: Deezer Logo & Link -->
+      <!-- Sezione sinistra: Deezer Logo & Link -->
       <a class="deezer-attribution" href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" aria-label="Deezer">
         <span class="deezer-text">Powered by Deezer</span>
         <svg viewBox="0 0 512 512" class="deezer-logo" fill="currentColor">
           <path d="M112 376v64H16v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm-256-96v64h-96v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm-128-96v64h-96v-64h96zm128 0v64h-96v-64h96zm0-96v64h-96V88h96z"/>
         </svg>
       </a>
+
+      <div class="footer-divider" />
+      <!-- Sezione destra: Credits Modal -->
+      <button class="credits-btn" @click="showCredits = true">
+        <Icon name="ph:info" class="credits-icon" /> Credits & Info
+      </button>
     </footer>
   </div>
 </template>
