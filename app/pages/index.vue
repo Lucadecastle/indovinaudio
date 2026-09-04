@@ -156,9 +156,20 @@ useHead({
 
     <!-- ── Footer ──────────────── -->
     <footer class="game-footer">
+      <!-- Sezione sinistra: Credits Modal -->
       <button class="credits-btn" @click="showCredits = true">
         <Icon name="ph:info" class="credits-icon" /> Credits & Info
       </button>
+
+      <div class="footer-divider" />
+
+      <!-- Sezione destra: Deezer Logo & Link -->
+      <a class="deezer-attribution" href="https://www.deezer.com" target="_blank" rel="noopener noreferrer" aria-label="Deezer">
+        <span class="deezer-text">Powered by Deezer</span>
+        <svg viewBox="0 0 512 512" class="deezer-logo" fill="currentColor">
+          <path d="M112 376v64H16v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm-256-96v64h-96v-64h96zm128 0v64h-96v-64h96zm128 0v64h-96v-64h96zm-128-96v64h-96v-64h96zm128 0v64h-96v-64h96zm0-96v64h-96V88h96z"/>
+        </svg>
+      </a>
     </footer>
   </div>
 </template>
@@ -298,10 +309,18 @@ useHead({
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 16px;
   pointer-events: auto;
 }
 
-.credits-btn {
+.footer-divider {
+  width: 1px;
+  height: 16px;
+  background-color: var(--color-neu-text-dim);
+  opacity: 0.3;
+}
+
+.credits-btn, .deezer-attribution {
   background: none;
   border: none;
   display: flex;
@@ -312,12 +331,13 @@ useHead({
   font-weight: 600;
   cursor: pointer;
   opacity: 0.6;
-  transition: opacity 0.2s, color 0.2s;
+  transition: opacity 0.2s, color 0.2s, background 0.2s;
   padding: 8px 16px;
   border-radius: var(--radius-neu-full);
+  text-decoration: none;
 }
 
-.credits-btn:hover {
+.credits-btn:hover, .deezer-attribution:hover {
   opacity: 1;
   color: var(--color-neu-text);
   background: rgba(255, 255, 255, 0.05);
@@ -325,6 +345,17 @@ useHead({
 
 .credits-icon {
   font-size: 1.1rem;
+}
+
+.deezer-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.deezer-logo {
+  height: 16px;
+  width: auto;
+  color: #fff;
 }
 
 @media (max-width: 480px) {

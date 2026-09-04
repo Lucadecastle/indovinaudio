@@ -21,7 +21,7 @@ defineProps<{
 
         <div class="credits-body">
           <div class="credit-section neu-concave">
-            <h3>🎵 Musica & API</h3>
+            <h3><Icon name="ph:music-notes-simple" class="section-icon" /> Musica & API</h3>
             <p>
               Questo progetto utilizza le API di 
               <a href="https://www.deezer.com" target="_blank" class="text-gradient-accent font-bold">Deezer</a>
@@ -39,7 +39,7 @@ defineProps<{
           </div>
 
           <div class="credit-section neu-concave">
-            <h3>🎨 Icone</h3>
+            <h3><Icon name="ph:palette" class="section-icon" /> Icone</h3>
             <p>
               Le icone dell'interfaccia sono fornite da 
               <a href="https://phosphoricons.com/" target="_blank" class="text-gradient-accent font-bold">Phosphor Icons</a>.
@@ -47,7 +47,7 @@ defineProps<{
           </div>
           
           <div class="credit-section neu-concave">
-            <h3>💻 Sviluppo</h3>
+            <h3><Icon name="ph:code" class="section-icon" /> Sviluppo</h3>
             <p>
               Indovinaudio è un progetto dimostrativo open-source costruito con Nuxt 4 e Tailwind CSS.
             </p>
@@ -126,6 +126,14 @@ defineProps<{
   font-weight: 700;
   color: var(--color-neu-text);
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.section-icon {
+  font-size: 1.2rem;
+  color: var(--color-neu-accent);
 }
 
 .credit-section p {

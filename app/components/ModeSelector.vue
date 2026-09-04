@@ -195,9 +195,9 @@ function handleStart() {
       </button>
     </div>
 
-    <!-- Sub-selezione: Genere -->
     <Transition name="expand" mode="out-in">
-      <div v-if="selectedMode === 'genre'" class="sub-selection animate-slide-up">
+      <!-- Sub-selezione: Genere -->
+      <div v-if="selectedMode === 'genre'" key="genre" class="sub-selection animate-slide-up">
         <p class="sub-label">Scegli un genere</p>
         <div class="genre-chips">
           <button
@@ -213,11 +213,9 @@ function handleStart() {
           </button>
         </div>
       </div>
-    </Transition>
 
-    <!-- Sub-selezione: Artista -->
-    <Transition name="expand" mode="out-in">
-      <div v-if="selectedMode === 'artist'" class="sub-selection animate-slide-up">
+      <!-- Sub-selezione: Artista -->
+      <div v-else-if="selectedMode === 'artist'" key="artist" class="sub-selection animate-slide-up">
         <p class="sub-label">Cerca un artista</p>
         <div class="artist-search-wrapper">
           <input
@@ -240,7 +238,7 @@ function handleStart() {
                 v-for="artist in artistSuggestions"
                 :key="artist.id"
                 class="suggestion-item"
-                @mousedown.prevent="selectArtist(artist)"
+                @mousedown.prevent="selectArtist(artist.id, artist.name)"
               >
                 <img
                   v-if="artist.picture"
@@ -254,11 +252,9 @@ function handleStart() {
           </Transition>
         </div>
       </div>
-    </Transition>
 
-    <!-- Sub-selezione: Periodo -->
-    <Transition name="expand" mode="out-in">
-      <div v-if="selectedMode === 'decade'" class="sub-selection animate-slide-up">
+      <!-- Sub-selezione: Periodo -->
+      <div v-else-if="selectedMode === 'decade'" key="decade" class="sub-selection animate-slide-up">
         <p class="sub-label">Scegli un decennio</p>
         <div class="genre-chips">
           <button
@@ -274,11 +270,9 @@ function handleStart() {
           </button>
         </div>
       </div>
-    </Transition>
 
-    <!-- Sub-selezione: Nazione -->
-    <Transition name="expand" mode="out-in">
-      <div v-if="selectedMode === 'country'" class="sub-selection animate-slide-up">
+      <!-- Sub-selezione: Nazione -->
+      <div v-else-if="selectedMode === 'country'" key="country" class="sub-selection animate-slide-up">
         <p class="sub-label">Scegli una nazione</p>
         <div class="genre-chips">
           <button
