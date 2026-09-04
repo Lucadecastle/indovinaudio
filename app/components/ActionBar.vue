@@ -15,22 +15,22 @@ const emit = defineEmits<{
 <template>
   <div class="action-bar">
     <button
-      id="surrender-btn"
-      class="neu-btn neu-flat action-btn action-btn--surrender"
-      @click="emit('surrender')"
-    >
-      <Icon name="ph:flag" class="btn-icon" />
-      <span>Arrenditi</span>
-    </button>
-
-    <button
       id="skip-btn"
       class="neu-btn neu-convex action-btn action-btn--skip"
       :disabled="!canSkip"
       @click="emit('skip')"
     >
       <Icon name="ph:skip-forward-fill" class="btn-icon" />
-      <span>Salta</span>
+      <span class="btn-text">Salta</span>
+    </button>
+
+    <button
+      id="surrender-btn"
+      class="neu-btn neu-flat action-btn action-btn--surrender"
+      @click="emit('surrender')"
+    >
+      <Icon name="ph:flag" class="btn-icon" />
+      <span class="btn-text">Arrenditi</span>
     </button>
 
     <button
@@ -40,7 +40,7 @@ const emit = defineEmits<{
       @click="emit('submit')"
     >
       <Icon name="ph:check-circle-fill" class="btn-icon" />
-      <span>Conferma</span>
+      <span class="btn-text">Conferma</span>
     </button>
   </div>
 </template>
@@ -88,9 +88,23 @@ const emit = defineEmits<{
 }
 
 @media (max-width: 480px) {
+  .action-bar {
+    gap: 8px;
+  }
+  
   .action-btn {
-    padding: 12px 16px;
-    font-size: 0.88rem;
+    padding: 12px 6px;
+    font-size: 0.8rem;
+    gap: 4px;
+  }
+
+  .btn-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .action-btn--surrender .btn-text {
+    display: none;
   }
 }
 </style>

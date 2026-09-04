@@ -253,7 +253,7 @@ function handleStart() {
                   v-for="artist in artistSuggestions"
                   :key="artist.id"
                   class="suggestion-item"
-                  @mousedown.prevent="selectArtist(artist.id, artist.name)"
+                  @pointerdown.prevent="selectArtist(artist.id, artist.name)"
                 >
                   <img
                     v-if="artist.picture"
@@ -571,20 +571,33 @@ select.neu-input {
   }
 
   .modes-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
 
   .mode-card {
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 14px;
-    padding: 16px 20px;
-    text-align: left;
+    padding: 12px 8px;
+    gap: 6px;
+  }
+
+  .mode-card:last-child {
+    grid-column: span 2;
   }
 
   .mode-emoji {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
+  }
+
+  .mode-label {
+    font-size: 0.8rem;
+  }
+
+  .mode-desc {
+    display: none;
+  }
+
+  .sub-selections-wrapper {
+    gap: 12px;
   }
 }
 </style>
