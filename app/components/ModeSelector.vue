@@ -195,103 +195,105 @@ function handleStart() {
       </button>
     </div>
 
-    <Transition name="expand" mode="out-in">
-      <!-- Sub-selezione: Genere -->
-      <div v-if="selectedMode === 'genre'" key="genre" class="sub-selection animate-slide-up">
-        <p class="sub-label">Scegli un genere</p>
-        <div class="genre-chips">
-          <button
-            v-for="g in genres"
-            :key="g.id"
-            :id="`genre-${g.id}`"
-            class="genre-chip neu-convex"
-            :class="{ 'genre-chip--active neu-pressed': selectedGenre === g.id }"
-            @click="selectGenre(g.id)"
-          >
-            <Icon :name="g.icon" />
-            <span>{{ g.label }}</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Sub-selezione: Artista -->
-      <div v-else-if="selectedMode === 'artist'" key="artist" class="sub-selection animate-slide-up">
-        <p class="sub-label">Cerca un artista</p>
-        <div class="artist-search-wrapper">
-          <input
-            id="artist-search-input"
-            v-model="artistQuery"
-            type="text"
-            class="neu-input"
-            placeholder="Es. Tame Impala, Dua Lipa..."
-            autocomplete="off"
-            @input="searchArtists(artistQuery)"
-            @focus="showArtistDropdown = artistSuggestions.length > 0"
-            @blur="setTimeout(() => (showArtistDropdown = false), 200)"
-          />
-          <Transition name="expand">
-            <ul
-              v-if="showArtistDropdown"
-              class="suggestions-dropdown neu-surface"
+    <div class="sub-selections-container">
+      <Transition name="expand">
+        <!-- Sub-selezione: Genere -->
+        <div v-if="selectedMode === 'genre'" key="genre" class="sub-selection animate-slide-up">
+          <p class="sub-label">Scegli un genere</p>
+          <div class="genre-chips">
+            <button
+              v-for="g in genres"
+              :key="g.id"
+              :id="`genre-${g.id}`"
+              class="genre-chip neu-convex"
+              :class="{ 'genre-chip--active neu-pressed': selectedGenre === g.id }"
+              @click="selectGenre(g.id)"
             >
-              <li
-                v-for="artist in artistSuggestions"
-                :key="artist.id"
-                class="suggestion-item"
-                @mousedown.prevent="selectArtist(artist.id, artist.name)"
+              <Icon :name="g.icon" />
+              <span>{{ g.label }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sub-selezione: Artista -->
+        <div v-else-if="selectedMode === 'artist'" key="artist" class="sub-selection animate-slide-up">
+          <p class="sub-label">Cerca un artista</p>
+          <div class="artist-search-wrapper">
+            <input
+              id="artist-search-input"
+              v-model="artistQuery"
+              type="text"
+              class="neu-input"
+              placeholder="Es. Tame Impala, Dua Lipa..."
+              autocomplete="off"
+              @input="searchArtists(artistQuery)"
+              @focus="showArtistDropdown = artistSuggestions.length > 0"
+              @blur="setTimeout(() => (showArtistDropdown = false), 200)"
+            />
+            <Transition name="expand">
+              <ul
+                v-if="showArtistDropdown"
+                class="suggestions-dropdown neu-surface"
               >
-                <img
-                  v-if="artist.picture"
-                  :src="artist.picture"
-                  :alt="artist.name"
-                  class="suggestion-img"
-                />
-                <span>{{ artist.name }}</span>
-              </li>
-            </ul>
-          </Transition>
+                <li
+                  v-for="artist in artistSuggestions"
+                  :key="artist.id"
+                  class="suggestion-item"
+                  @mousedown.prevent="selectArtist(artist.id, artist.name)"
+                >
+                  <img
+                    v-if="artist.picture"
+                    :src="artist.picture"
+                    class="suggestion-img"
+                    alt=""
+                  />
+                  <span>{{ artist.name }}</span>
+                </li>
+              </ul>
+            </Transition>
+          </div>
         </div>
-      </div>
 
-      <!-- Sub-selezione: Periodo -->
-      <div v-else-if="selectedMode === 'decade'" key="decade" class="sub-selection animate-slide-up">
-        <p class="sub-label">Scegli un decennio</p>
-        <div class="genre-chips">
-          <button
-            v-for="d in decades"
-            :key="d.id"
-            :id="`decade-${d.id}`"
-            class="genre-chip neu-convex"
-            :class="{ 'genre-chip--active neu-pressed': selectedDecade === d.id }"
-            @click="selectDecade(d.id)"
-          >
-            <Icon :name="d.icon" />
-            <span>{{ d.label }}</span>
-          </button>
+        <!-- Sub-selezione: Periodo -->
+        <div v-else-if="selectedMode === 'decade'" key="decade" class="sub-selection animate-slide-up">
+          <p class="sub-label">Scegli un decennio</p>
+          <div class="genre-chips">
+            <button
+              v-for="d in decades"
+              :key="d.id"
+              :id="`decade-${d.id}`"
+              class="genre-chip neu-convex"
+              :class="{ 'genre-chip--active neu-pressed': selectedDecade === d.id }"
+              @click="selectDecade(d.id)"
+            >
+              <Icon :name="d.icon" />
+              <span>{{ d.label }}</span>
+            </button>
+          </div>
         </div>
-      </div>
 
-      <!-- Sub-selezione: Nazione -->
-      <div v-else-if="selectedMode === 'country'" key="country" class="sub-selection animate-slide-up">
-        <p class="sub-label">Scegli una nazione</p>
-        <div class="genre-chips">
-          <button
-            v-for="c in countries"
-            :key="c.id"
-            :id="`country-${c.id}`"
-            class="genre-chip neu-convex"
-            :class="{ 'genre-chip--active neu-pressed': selectedCountry === c.id }"
-            @click="selectCountry(c.id)"
-          >
-            <Icon :name="c.icon" />
-            <span>{{ c.label }}</span>
-          </button>
+        <!-- Sub-selezione: Nazione -->
+        <div v-else-if="selectedMode === 'country'" key="country" class="sub-selection animate-slide-up">
+          <p class="sub-label">Scegli una nazione</p>
+          <div class="genre-chips">
+            <button
+              v-for="c in countries"
+              :key="c.id"
+              :id="`country-${c.id}`"
+              class="genre-chip neu-convex"
+              :class="{ 'genre-chip--active neu-pressed': selectedCountry === c.id }"
+              @click="selectCountry(c.id)"
+            >
+              <Icon :name="c.icon" />
+              <span>{{ c.label }}</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </Transition>
+      </Transition>
+    </div>
 
     <!-- Pulsante Start -->
-    <Transition name="expand" mode="out-in">
+    <Transition name="expand">
       <button
         v-if="selectedMode"
         id="start-game-btn"
@@ -398,7 +400,13 @@ function handleStart() {
 }
 
 /* ── Sub Selections ────── */
+.sub-selections-container {
+  display: grid;
+  width: 100%;
+}
+
 .sub-selection {
+  grid-area: 1 / 1;
   width: 100%;
   display: flex;
   flex-direction: column;
