@@ -359,7 +359,7 @@ function handleStart() {
 }
 
 .main-logo {
-  height: 72px;
+  height: 96px;
   width: auto;
   filter: drop-shadow(0 6px 16px rgba(196, 255, 28, 0.2));
 }
@@ -563,7 +563,7 @@ select.neu-input {
   }
 
   .main-logo {
-    height: 56px;
+    height: 72px;
   }
 
   .title {
