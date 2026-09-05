@@ -155,9 +155,9 @@ async function searchArtists(query: string) {
   }, 300)
 }
 
-function selectArtist(artist: { id: number; name: string }) {
-  artistQuery.value = artist.name
-  selectedArtistId.value = artist.id
+function selectArtist(id: number, name: string) {
+  artistQuery.value = name
+  selectedArtistId.value = id
   showArtistDropdown.value = false
   artistSuggestions.value = []
 }

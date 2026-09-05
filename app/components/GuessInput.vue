@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 
 const props = defineProps<{
   disabled?: boolean
@@ -15,6 +15,7 @@ const suggestions = ref<{ id: number; name: string; title?: string; artist?: str
 const showDropdown = ref(false)
 const isSearching = ref(false)
 const highlightIndex = ref(-1)
+const isSelecting = ref(false)
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -46,10 +47,17 @@ async function fetchSuggestions(query: string) {
 }
 
 function selectItem(item: { name: string }) {
+  isSelecting.value = true
   model.value = item.name
   showDropdown.value = false
   suggestions.value = []
   emit('selectSuggestion', item.name)
+  // Auto-submit the guess when a suggestion is selected
+  emit('submit', item.name)
+  // Reset the flag after the watcher cycle completes
+  nextTick(() => {
+    isSelecting.value = false
+  })
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -89,6 +97,8 @@ function handleKeydown(e: KeyboardEvent) {
 }
 
 watch(model, (val) => {
+  // Don't re-fetch when value was set programmatically by selectItem
+  if (isSelecting.value) return
   fetchSuggestions(val)
 })
 </script>
