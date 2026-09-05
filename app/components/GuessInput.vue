@@ -3,6 +3,7 @@ import { ref, watch, nextTick } from 'vue'
 
 const props = defineProps<{
   disabled?: boolean
+  wrong?: boolean
 }>()
 
 const model = defineModel<string>({ default: '' })
@@ -105,7 +106,7 @@ watch(model, (val) => {
 
 <template>
   <div class="guess-input-wrapper">
-    <div class="input-container">
+    <div class="input-container" :class="{ 'input-container--wrong': wrong }">
       <Icon name="ph:magnifying-glass" class="input-icon" />
       <input
         id="guess-input"
@@ -235,5 +236,19 @@ watch(model, (val) => {
 
 .dropdown-leave-active {
   animation: slide-up 0.15s cubic-bezier(0.22, 1, 0.36, 1) reverse;
+}
+
+/* ── Wrong Shake ──── */
+.input-container--wrong .guess-field {
+  border-color: rgba(255, 60, 60, 0.5) !important;
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(3px); }
 }
 </style>

@@ -37,6 +37,8 @@ export function useAudioRound() {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
   const hasListened = ref(false)
+  const wrongGuess = ref(false)
+  let wrongGuessTimer: ReturnType<typeof setTimeout> | null = null
 
   // ── Audio ──
   let audio: HTMLAudioElement | null = null
@@ -199,9 +201,25 @@ export function useAudioRound() {
       return true
     }
 
-    // Risposta sbagliata = sconfitta
-    endRound('lose', 0)
+    // Risposta sbagliata: se è l'ultimo step → sconfitta, altrimenti → skip
+    if (isLastStep.value) {
+      endRound('lose', 0)
+      return false
+    }
+
+    // Avanza al prossimo step (come uno skip) con feedback visivo
+    currentStep.value++
+    hasListened.value = false
+    triggerWrongGuess()
     return false
+  }
+
+  function triggerWrongGuess() {
+    if (wrongGuessTimer) clearTimeout(wrongGuessTimer)
+    wrongGuess.value = true
+    wrongGuessTimer = setTimeout(() => {
+      wrongGuess.value = false
+    }, 2000)
   }
 
   function endRound(outcome: 'win' | 'lose', points: number) {
@@ -291,6 +309,7 @@ export function useAudioRound() {
     isLoading,
     error,
     hasListened,
+    wrongGuess,
 
     // Computed
     maxPoints,

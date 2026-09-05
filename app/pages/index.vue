@@ -15,6 +15,7 @@ const {
   isLoading,
   error,
   hasListened,
+  wrongGuess,
   maxPoints,
   currentDuration,
   isLastStep,
@@ -38,7 +39,10 @@ function handleStart(mode: GameMode, filter?: string) {
 function handleGuessSubmit(value?: string) {
   const input = value || guessInput.value
   if (!input.trim()) return
-  guess(input)
+  const isCorrect = guess(input)
+  if (!isCorrect) {
+    guessInput.value = ''
+  }
 }
 
 function handleSkip() {
@@ -131,9 +135,18 @@ useHead({
           <GuessInput
             v-model="guessInput"
             :disabled="isPlaying"
+            :wrong="wrongGuess"
             @submit="handleGuessSubmit"
             @select-suggestion="handleSelectSuggestion"
           />
+
+          <!-- Toast risposta sbagliata -->
+          <Transition name="toast">
+            <div v-if="wrongGuess" class="wrong-toast">
+              <Icon name="ph:x-circle-fill" class="wrong-toast-icon" />
+              <span>Risposta sbagliata! Riprova con un frammento più lungo</span>
+            </div>
+          </Transition>
 
           <!-- Barra Azioni -->
           <ActionBar
@@ -374,6 +387,49 @@ useHead({
 
   .game-phase {
     gap: 22px;
+  }
+}
+
+/* ── Wrong Guess Toast ── */
+.wrong-toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-neu);
+  background: rgba(255, 60, 60, 0.12);
+  border: 1px solid rgba(255, 60, 60, 0.25);
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  font-weight: 600;
+  width: 100%;
+  max-width: 460px;
+  justify-content: center;
+  text-align: center;
+}
+
+.wrong-toast-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* ── Toast Transition ── */
+.toast-enter-active {
+  animation: toast-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.toast-leave-active {
+  animation: toast-in 0.25s cubic-bezier(0.22, 1, 0.36, 1) reverse;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 </style>
